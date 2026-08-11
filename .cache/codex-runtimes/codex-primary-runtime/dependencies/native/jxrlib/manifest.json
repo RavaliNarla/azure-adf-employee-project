@@ -1,0 +1,7 @@
+{
+  "name": "jxrlib",
+  "version": "1.1",
+  "targetPlatform": "win32",
+  "targetArch": "x64",
+  "packageSpec": "jxrlib=1.1=hcfcfb64_3"
+}

@@ -1,0 +1,7 @@
+{
+  "name": "poppler",
+  "version": "26.05.0",
+  "targetPlatform": "win32",
+  "targetArch": "x64",
+  "packageSpec": "poppler=26.05.0=h4b9d284_3"
+}
