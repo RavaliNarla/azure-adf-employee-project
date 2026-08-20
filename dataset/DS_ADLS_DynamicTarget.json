@@ -8,6 +8,9 @@
 		"parameters": {
 			"p_TargetPath": {
 				"type": "string"
+			},
+			"p_FileName": {
+				"type": "string"
 			}
 		},
 		"annotations": [],
