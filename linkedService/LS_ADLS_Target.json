@@ -2,7 +2,9 @@
 	"name": "LS_ADLS_Target",
 	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
-		"annotations": [],
+		"annotations": [
+			"p_FileName"
+		],
 		"type": "AzureBlobFS",
 		"typeProperties": {
 			"url": "https://metaproject2026.dfs.core.windows.net/",
