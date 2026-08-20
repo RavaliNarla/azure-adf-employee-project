@@ -92,7 +92,10 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"p_SourceSchema": "@item().SourceSchema",
-										"p_SourceTable": "@item().SourceSchema"
+										"p_SourceTable": {
+											"value": "@item().SourceTable",
+											"type": "Expression"
+										}
 									}
 								}
 							],
