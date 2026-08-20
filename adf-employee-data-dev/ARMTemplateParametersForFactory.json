@@ -1,0 +1,45 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-employee-data-dev"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
+		"LS_ADLS_Target_accountKey": {
+			"value": ""
+		},
+		"LS_AzureSQL_Employee_password": {
+			"value": ""
+		},
+		"LS_AzureSQL_Source_password": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://stdataengdev12345.dfs.core.windows.net/"
+		},
+		"LS_ADLS_Target_properties_typeProperties_url": {
+			"value": "https://metaproject2026.dfs.core.windows.net/"
+		},
+		"LS_AzureSQL_Employee_properties_typeProperties_server": {
+			"value": "sql-employee-data-12345.database.windows.net"
+		},
+		"LS_AzureSQL_Employee_properties_typeProperties_database": {
+			"value": "empdb"
+		},
+		"LS_AzureSQL_Employee_properties_typeProperties_userName": {
+			"value": "adminuser"
+		},
+		"LS_AzureSQL_Source_properties_typeProperties_server": {
+			"value": "sql-employee-data-12345.database.windows.net"
+		},
+		"LS_AzureSQL_Source_properties_typeProperties_database": {
+			"value": "metadb"
+		},
+		"LS_AzureSQL_Source_properties_typeProperties_userName": {
+			"value": "adminuser"
+		}
+	}
+}
