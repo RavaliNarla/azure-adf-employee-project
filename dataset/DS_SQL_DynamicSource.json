@@ -1,0 +1,26 @@
+{
+	"name": "DS_SQL_DynamicSource",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureSQL_Source",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"p_SourceSchema": {
+				"type": "string"
+			},
+			"p_SourceTable": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"table": {
+				"value": "@concat(\n    dataset().p_SourceSchema,\n    '.',\n    dataset().p_SourceTable\n)",
+				"type": "Expression"
+			}
+		}
+	}
+}
