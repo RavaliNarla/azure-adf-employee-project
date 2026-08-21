@@ -130,7 +130,7 @@
 						"referenceName": "DS_ADLS_DynamicSource",
 						"type": "DatasetReference",
 						"parameters": {
-							"p_SourceContainer": "@item().SourceContainer",
+							"p_SourceContainer": "@pipeline().parameters.p_SourceContainer",
 							"p_SourcePathPattern": "@pipeline().parameters.p_SourcePathPattern",
 							"p_FileName": "@pipeline().parameters.p_FileName"
 						}
