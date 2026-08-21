@@ -44,7 +44,21 @@
 					"items": {
 						"value": "@activity('Lookup_ActiveEntities').output.value",
 						"type": "Expression"
-					}
+					},
+					"activities": [
+						{
+							"name": "Execute_ProcessEntity",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"policy": {
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"waitOnCompletion": true
+							}
+						}
+					]
 				}
 			}
 		],
