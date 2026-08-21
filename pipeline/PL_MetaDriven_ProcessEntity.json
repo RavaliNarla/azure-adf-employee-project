@@ -57,8 +57,8 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"p_SourceContainer": "@item().SourceContainer",
-							"p_SourcePathPattern": "@item().SourcePathPattern",
-							"p_FileName": "@item().FileName"
+							"p_SourcePathPattern": "@pipeline().parameters.p_SourcePathPattern",
+							"p_FileName": "@pipeline().parameters.p_FileName"
 						}
 					}
 				],
@@ -67,7 +67,7 @@
 						"referenceName": "DS_SQL_DynamicTarget",
 						"type": "DatasetReference",
 						"parameters": {
-							"p_StagingTable": "@item().StagingTable"
+							"p_StagingTable": "@pipeline().parameters.p_StagingTable"
 						}
 					}
 				]
