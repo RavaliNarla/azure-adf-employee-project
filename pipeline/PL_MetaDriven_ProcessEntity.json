@@ -67,7 +67,7 @@
 						"referenceName": "DS_SQL_DynamicTarget",
 						"type": "DatasetReference",
 						"parameters": {
-							"p_StagingTable": "@pipeline().parameters.p_StagingTable"
+							"p_StagingTable": "@last(split(pipeline().parameters.p_StagingTable,'.'))"
 						}
 					}
 				]
