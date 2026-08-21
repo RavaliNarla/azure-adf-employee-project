@@ -55,7 +55,19 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"waitOnCompletion": true
+								"pipeline": {
+									"referenceName": "PL_MetaDriven_ProcessEntity",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"p_EntityId": "@item().EntityId",
+									"p_EntityName": "@item().EntityName",
+									"p_SourceContainer": "@item().SourceContainer",
+									"p_SourcePathPattern": "@item().SourcePathPattern",
+									"p_SourceFileFormat": "@item().SourceFileFormat",
+									"p_StagingTable": "@item().StagingTable"
+								}
 							}
 						}
 					]
