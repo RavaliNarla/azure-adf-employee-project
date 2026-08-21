@@ -203,8 +203,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "DS_ADLS_SalesOrder",
-						"type": "DatasetReference"
+						"referenceName": "DS_ADLS_DynamicSource",
+						"type": "DatasetReference",
+						"parameters": {
+							"p_SourceContainer": "@item().SourceContainer",
+							"p_SourcePathPattern": "@item().SourcePathPattern",
+							"p_FileName": "@item().FileName"
+						}
 					}
 				],
 				"outputs": [
