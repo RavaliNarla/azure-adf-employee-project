@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT\n    EntityId,\n    EntityName,\n    SourceContainer,\n    SourcePathPattern,\n    SourceFileFormat,\n    StagingTable,\n    TargetSchema,\n    TargetTable,\n    LoadType,\n    BusinessKeyColumns,\n    WatermarkColumn\nFROM meta.EntityConfig\nWHERE IsActive = 1\nORDER BY Priority;",
+						"sqlReaderQuery": "SELECT\n    EntityId,\n    EntityName,\n    SourceContainer,\n    SourcePathPattern,\n    SourceFileFormat,\n    FileName,\n    StagingTable,\n    TargetSchema,\n    TargetTable,\n    LoadType,\n    BusinessKeyColumns,\n    WatermarkColumn\nFROM meta.EntityConfig\nWHERE IsActive = 1\nORDER BY Priority;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
