@@ -91,6 +91,9 @@
 			},
 			"p_StagingTable": {
 				"type": "string"
+			},
+			"p_FileName": {
+				"type": "string"
 			}
 		},
 		"annotations": []
