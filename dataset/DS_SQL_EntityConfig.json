@@ -1,0 +1,98 @@
+{
+	"name": "DS_SQL_EntityConfig",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureSQL_MetaDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "EntityId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SourceSystemId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "EntityName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EntityType",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SourceContainer",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SourcePathPattern",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SourceFileFormat",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SourceDelimiter",
+				"type": "nvarchar"
+			},
+			{
+				"name": "HasHeader",
+				"type": "bit"
+			},
+			{
+				"name": "StagingTable",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TargetSchema",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TargetTable",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LoadType",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BusinessKeyColumns",
+				"type": "nvarchar"
+			},
+			{
+				"name": "WatermarkColumn",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SCDType",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "IsActive",
+				"type": "bit"
+			},
+			{
+				"name": "Priority",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CreatedOn",
+				"type": "datetime2",
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "meta",
+			"table": "EntityConfig"
+		}
+	}
+}
