@@ -1,0 +1,414 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adf-employee-data-dev"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline2new')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "JsonSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "JsonWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "No",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['No']"
+										}
+									},
+									{
+										"source": {
+											"name": "Age",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['Age']"
+										}
+									},
+									{
+										"source": {
+											"name": "Gender",
+											"type": "Int32"
+										},
+										"sink": {
+											"path": "$['Gender']"
+										}
+									},
+									{
+										"source": {
+											"name": "Salary",
+											"type": "Decimal"
+										},
+										"sink": {
+											"path": "$['Salary']"
+										}
+									},
+									{
+										"source": {
+											"name": "Monthly Expenditure",
+											"type": "Decimal"
+										},
+										"sink": {
+											"path": "$['Monthly Expenditure']"
+										}
+									},
+									{
+										"source": {
+											"name": "Occupation",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['Occupation']"
+										}
+									},
+									{
+										"source": {
+											"name": "Healthy Lifestyle",
+											"type": "String"
+										},
+										"sink": {
+											"path": "$['Healthy Lifestyle']"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "AzureSqlTable1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Json1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2026-08-19T09:21:48Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_MetaDriven_ProcessEntity')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy_ADLS_to_SQL",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"additionalColumns": [
+									{
+										"name": "LoadTimestamp",
+										"value": "@utcnow()"
+									},
+									{
+										"name": "FileName",
+										"value": "$$FILEPATH"
+									}
+								],
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "EmployeeId",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "EmployeeId",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "EmployeeName",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "EmployeeName",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Department",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Department",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Salary",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Salary",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 2,
+											"precision": 18
+										}
+									},
+									{
+										"source": {
+											"name": "LoadTimestamp",
+											"type": "String"
+										},
+										"sink": {
+											"name": "LoadTimestamp",
+											"type": "DateTime",
+											"physicalType": "datetime2"
+										}
+									},
+									{
+										"source": {
+											"name": "FileName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FileName",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_ADLS_DynamicSource",
+								"type": "DatasetReference",
+								"parameters": {
+									"p_SourceContainer": "@pipeline().parameters.p_SourceContainer",
+									"p_SourcePathPattern": "@pipeline().parameters.p_SourcePathPattern",
+									"p_FileName": "@pipeline().parameters.p_FileName"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_SQL_DynamicTarget",
+								"type": "DatasetReference",
+								"parameters": {
+									"p_StagingTable": "@last(split(pipeline().parameters.p_StagingTable,'.'))"
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"p_EntityId": {
+						"type": "int"
+					},
+					"p_EntityName": {
+						"type": "string"
+					},
+					"p_SourceContainer": {
+						"type": "string"
+					},
+					"p_SourcePathPattern": {
+						"type": "string"
+					},
+					"p_SourceFileFormat": {
+						"type": "string"
+					},
+					"p_StagingTable": {
+						"type": "string"
+					},
+					"p_FileName": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_MetaDriven_Master')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup_ActiveEntities",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT\n    EntityId,\n    EntityName,\n    SourceContainer,\n    SourcePathPattern,\n    SourceFileFormat,\n    FileName,\n    StagingTable,\n    TargetSchema,\n    TargetTable,\n    LoadType,\n    BusinessKeyColumns,\n    WatermarkColumn\nFROM meta.EntityConfig\nWHERE IsActive = 1\nORDER BY Priority;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "DS_SQL_EntityConfig",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach_Entity",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup_ActiveEntities",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup_ActiveEntities').output.value",
+								"type": "Expression"
+							},
+							"isSequential": false,
+							"activities": [
+								{
+									"name": "Execute_ProcessEntity",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"policy": {
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "PL_MetaDriven_ProcessEntity",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"p_EntityId": "@item().EntityId",
+											"p_EntityName": "@item().EntityName",
+											"p_SourceContainer": "@item().SourceContainer",
+											"p_SourcePathPattern": "@item().SourcePathPattern",
+											"p_SourceFileFormat": "@item().SourceFileFormat",
+											"p_StagingTable": "@item().StagingTable",
+											"p_FileName": "@item().FileName"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/PL_MetaDriven_ProcessEntity')]"
+			]
+		}
+	]
+}

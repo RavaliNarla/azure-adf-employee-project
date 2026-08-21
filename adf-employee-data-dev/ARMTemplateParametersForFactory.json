@@ -17,6 +17,12 @@
 		"LS_AzureSQL_Source_password": {
 			"value": ""
 		},
+		"LS_ADLS_DataLake_accountKey": {
+			"value": ""
+		},
+		"LS_AzureSQL_MetaDB_password": {
+			"value": ""
+		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://stdataengdev12345.dfs.core.windows.net/"
 		},
@@ -39,6 +45,18 @@
 			"value": "metadb"
 		},
 		"LS_AzureSQL_Source_properties_typeProperties_userName": {
+			"value": "adminuser"
+		},
+		"LS_ADLS_DataLake_properties_typeProperties_url": {
+			"value": "https://projectmetadriven.dfs.core.windows.net/"
+		},
+		"LS_AzureSQL_MetaDB_properties_typeProperties_server": {
+			"value": "sql-employee-data-12345.database.windows.net"
+		},
+		"LS_AzureSQL_MetaDB_properties_typeProperties_database": {
+			"value": "metadb"
+		},
+		"LS_AzureSQL_MetaDB_properties_typeProperties_userName": {
 			"value": "adminuser"
 		}
 	}
