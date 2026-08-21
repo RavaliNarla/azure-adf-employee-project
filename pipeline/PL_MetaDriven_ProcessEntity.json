@@ -1,6 +1,26 @@
 {
 	"name": "PL_MetaDriven_ProcessEntity",
 	"properties": {
+		"parameters": {
+			"p_EntityId": {
+				"type": "int"
+			},
+			"p_EntityName": {
+				"type": "string"
+			},
+			"p_SourceContainer": {
+				"type": "string"
+			},
+			"p_SourcePathPattern": {
+				"type": "string"
+			},
+			"p_SourceFileFormat": {
+				"type": "string"
+			},
+			"p_StagingTable": {
+				"type": "string"
+			}
+		},
 		"annotations": []
 	}
 }
