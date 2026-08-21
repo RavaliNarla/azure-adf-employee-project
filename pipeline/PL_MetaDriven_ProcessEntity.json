@@ -173,7 +173,8 @@
 							},
 							{
 								"source": {
-									"name": "LoadTimestamp"
+									"name": "LoadTimestamp",
+									"type": "String"
 								},
 								"sink": {
 									"name": "LoadTimestamp",
@@ -182,6 +183,10 @@
 								}
 							},
 							{
+								"source": {
+									"name": "FileName",
+									"type": "String"
+								},
 								"sink": {
 									"name": "FileName",
 									"type": "String",
