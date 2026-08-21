@@ -3,28 +3,22 @@
 	"properties": {
 		"parameters": {
 			"p_EntityId": {
-				"type": "int",
-				"defaultValue": "@item().EntityId"
+				"type": "int"
 			},
 			"p_EntityName": {
-				"type": "string",
-				"defaultValue": "@item().EntityName"
+				"type": "string"
 			},
 			"p_SourceContainer": {
-				"type": "string",
-				"defaultValue": "@item().SourceContainer"
+				"type": "string"
 			},
 			"p_SourcePathPattern": {
-				"type": "string",
-				"defaultValue": "@item().SourcePathPattern"
+				"type": "string"
 			},
 			"p_SourceFileFormat": {
-				"type": "string",
-				"defaultValue": "@item().SourceFileFormat"
+				"type": "string"
 			},
 			"p_StagingTable": {
-				"type": "string",
-				"defaultValue": "@item().StagingTable"
+				"type": "string"
 			}
 		},
 		"annotations": []
