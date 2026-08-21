@@ -14,7 +14,7 @@
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "",
+			"schema": "stg",
 			"table": "@dataset().p_StagingTable"
 		}
 	}
