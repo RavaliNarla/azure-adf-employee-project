@@ -1,0 +1,21 @@
+{
+	"name": "DS_SQL_DynamicTarget",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureSQL_MetaDB",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"p_StagingTable": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "",
+			"table": "@dataset().p_StagingTable"
+		}
+	}
+}
