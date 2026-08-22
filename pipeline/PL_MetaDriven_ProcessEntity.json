@@ -94,6 +94,9 @@
 			},
 			"p_FileName": {
 				"type": "string"
+			},
+			"p_LoadType": {
+				"type": "string"
 			}
 		},
 		"annotations": []
