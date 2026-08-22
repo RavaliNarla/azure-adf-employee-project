@@ -94,8 +94,17 @@
 					"secureInput": false
 				},
 				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_Employee",
+					"type": "LinkedServiceReference"
+				},
 				"typeProperties": {
-					"scripts": [],
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "@if(equals(pipeline().parameters.p_LoadType,'Full'),concat('TRUNCATE TABLE ',pipeline().parameters.p_StagingTable,';'),'SELECT 1;')"
+						}
+					],
 					"scriptBlockExecutionTimeout": "02:00:00"
 				}
 			}
