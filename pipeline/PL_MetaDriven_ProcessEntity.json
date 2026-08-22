@@ -95,7 +95,7 @@
 				},
 				"userProperties": [],
 				"linkedServiceName": {
-					"referenceName": "LS_AzureSQL_Employee",
+					"referenceName": "LS_AzureSQL_MetaDB",
 					"type": "LinkedServiceReference"
 				},
 				"typeProperties": {
