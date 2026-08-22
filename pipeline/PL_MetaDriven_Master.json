@@ -68,7 +68,8 @@
 									"p_SourcePathPattern": "@item().SourcePathPattern",
 									"p_SourceFileFormat": "@item().SourceFileFormat",
 									"p_StagingTable": "@item().StagingTable",
-									"p_FileName": "@item().FileName"
+									"p_FileName": "@item().FileName",
+									"p_LoadType": "@item().LoadType"
 								}
 							}
 						}
