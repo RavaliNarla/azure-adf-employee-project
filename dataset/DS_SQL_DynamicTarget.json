@@ -8,6 +8,12 @@
 		"parameters": {
 			"p_StagingTable": {
 				"type": "string"
+			},
+			"p_TargetSchema": {
+				"type": "string"
+			},
+			"p_TargetTable": {
+				"type": "string"
 			}
 		},
 		"annotations": [],
@@ -15,7 +21,10 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": "stg",
-			"table": "@dataset().p_StagingTable"
+			"table": {
+				"value": "@dataset().p_StagingTable",
+				"type": "Expression"
+			}
 		}
 	}
 }
