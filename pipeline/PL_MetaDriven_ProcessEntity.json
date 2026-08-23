@@ -167,8 +167,12 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "DS_SQL_DynamicTarget",
-						"type": "DatasetReference"
+						"referenceName": "DS_SQL_DynamicDWTarget",
+						"type": "DatasetReference",
+						"parameters": {
+							"p_TargetSchema": "@item().TargetSchema",
+							"p_TargetTable": "@item().TargetTable"
+						}
 					}
 				]
 			}
