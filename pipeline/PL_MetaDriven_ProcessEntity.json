@@ -215,12 +215,6 @@
 			},
 			"p_LoadType": {
 				"type": "string"
-			},
-			"p_TargetSchema": {
-				"type": "string"
-			},
-			"p_TargetTable": {
-				"type": "string"
 			}
 		},
 		"annotations": []
