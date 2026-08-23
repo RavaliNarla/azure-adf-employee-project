@@ -62,14 +62,40 @@
 								},
 								"waitOnCompletion": true,
 								"parameters": {
-									"p_EntityId": "@item().EntityId",
-									"p_EntityName": "@item().EntityName",
-									"p_SourceContainer": "@item().SourceContainer",
-									"p_SourcePathPattern": "@item().SourcePathPattern",
-									"p_SourceFileFormat": "@item().SourceFileFormat",
-									"p_StagingTable": "@item().StagingTable",
-									"p_FileName": "@item().FileName",
-									"p_LoadType": "@item().LoadType"
+									"p_EntityId": {
+										"value": "@item().EntityId",
+										"type": "Expression"
+									},
+									"p_EntityName": {
+										"value": "@item().EntityName",
+										"type": "Expression"
+									},
+									"p_SourceContainer": {
+										"value": "@item().SourceContainer",
+										"type": "Expression"
+									},
+									"p_SourcePathPattern": {
+										"value": "@item().SourcePathPattern",
+										"type": "Expression"
+									},
+									"p_SourceFileFormat": {
+										"value": "@item().SourceFileFormat",
+										"type": "Expression"
+									},
+									"p_StagingTable": {
+										"value": "@item().StagingTable",
+										"type": "Expression"
+									},
+									"p_FileName": {
+										"value": "@item().FileName",
+										"type": "Expression"
+									},
+									"p_LoadType": {
+										"value": "@item().LoadType",
+										"type": "Expression"
+									},
+									"p_TargetSchema": "@item().TargetSchema",
+									"p_TargetTable": "@item().TargetTable"
 								}
 							}
 						}
