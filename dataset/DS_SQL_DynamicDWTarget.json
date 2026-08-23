@@ -1,0 +1,20 @@
+{
+	"name": "DS_SQL_DynamicDWTarget",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureSQL_MetaDB",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"p_TargetSchema": {
+				"type": "string"
+			},
+			"p_TargetTable": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}
