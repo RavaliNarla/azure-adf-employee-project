@@ -78,12 +78,7 @@
 						"referenceName": "DS_SQL_DynamicTarget",
 						"type": "DatasetReference",
 						"parameters": {
-							"p_StagingTable": "@last(split(pipeline().parameters.p_StagingTable,'.'))",
-							"p_TargetSchema": {
-								"value": "stg",
-								"type": "Expression"
-							},
-							"p_TargetTable": {
+							"p_StagingTable": {
 								"value": "@pipeline().parameters.p_StagingTable",
 								"type": "Expression"
 							}
@@ -111,7 +106,10 @@
 					"scripts": [
 						{
 							"type": "NonQuery",
-							"text": "@if(equals(pipeline().parameters.p_LoadType,'Full'),concat('TRUNCATE TABLE ',pipeline().parameters.p_StagingTable,';'),'SELECT 1;')"
+							"text": {
+								"value": "@if(equals(pipeline().parameters.p_LoadType,'Full'),concat('TRUNCATE TABLE ',pipeline().parameters.p_StagingTable,';'),'SELECT 1;')",
+								"type": "Expression"
+							}
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
