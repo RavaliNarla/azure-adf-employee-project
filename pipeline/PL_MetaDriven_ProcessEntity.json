@@ -105,6 +105,13 @@
 				"typeProperties": {
 					"scripts": [
 						{
+							"parameters": [
+								{
+									"name": "p_StagingTable",
+									"type": "String",
+									"value": "@pipeline().parameters.p_StagingTable"
+								}
+							],
 							"type": "NonQuery",
 							"text": {
 								"value": "@if(equals(pipeline().parameters.p_LoadType,'Full'),concat('TRUNCATE TABLE ',pipeline().parameters.p_StagingTable,';'),'SELECT 1;')",
