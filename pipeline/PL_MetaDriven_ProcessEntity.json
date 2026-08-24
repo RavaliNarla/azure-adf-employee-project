@@ -110,6 +110,11 @@
 									"name": "p_StagingTable",
 									"type": "String",
 									"value": "@pipeline().parameters.p_StagingTable"
+								},
+								{
+									"name": "p_LoadType",
+									"type": "String",
+									"value": "@pipeline().parameters.p_LoadType"
 								}
 							],
 							"type": "NonQuery",
