@@ -8,7 +8,7 @@
 		"parameters": {
 			"p_TargetTable": {
 				"type": "string",
-				"defaultValue": "DimEmployee"
+				"defaultValue": "FactSales"
 			},
 			"p_TargetSchema": {
 				"type": "string",
