@@ -142,8 +142,10 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
+						"preCopyScript": "@if(\n    equals(pipeline().parameters.p_LoadType,'Full'),\n    concat(\n        'TRUNCATE TABLE ',\n        pipeline().parameters.p_TargetSchema,\n        '.',\n        pipeline().parameters.p_TargetTable,\n        ';'\n    ),\n    'SELECT 1;'\n)",
 						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
 					},
 					"enableStaging": false,
 					"translator": {
