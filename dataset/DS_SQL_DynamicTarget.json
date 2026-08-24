@@ -8,12 +8,6 @@
 		"parameters": {
 			"p_StagingTable": {
 				"type": "string"
-			},
-			"p_TargetSchema": {
-				"type": "string"
-			},
-			"p_TargetTable": {
-				"type": "string"
 			}
 		},
 		"annotations": [],
