@@ -55,80 +55,6 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "EmployeeId",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "EmployeeId",
-									"type": "Int32",
-									"physicalType": "int"
-								}
-							},
-							{
-								"source": {
-									"name": "EmployeeName",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "EmployeeName",
-									"type": "String",
-									"physicalType": "nvarchar"
-								}
-							},
-							{
-								"source": {
-									"name": "Department",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Department",
-									"type": "String",
-									"physicalType": "nvarchar"
-								}
-							},
-							{
-								"source": {
-									"name": "Salary",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Salary",
-									"type": "Decimal",
-									"physicalType": "decimal",
-									"scale": 2,
-									"precision": 18
-								}
-							},
-							{
-								"source": {
-									"name": "LoadTimestamp",
-									"type": "String"
-								},
-								"sink": {
-									"name": "LoadTimestamp",
-									"type": "DateTime",
-									"physicalType": "datetime2"
-								}
-							},
-							{
-								"source": {
-									"name": "FileName",
-									"type": "String"
-								},
-								"sink": {
-									"name": "FileName",
-									"type": "String",
-									"physicalType": "nvarchar"
-								}
-							}
-						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
@@ -222,84 +148,6 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "EmployeeId",
-									"type": "Int32",
-									"physicalType": "int"
-								},
-								"sink": {
-									"name": "EmployeeId",
-									"type": "Int32",
-									"physicalType": "int"
-								}
-							},
-							{
-								"source": {
-									"name": "EmployeeName",
-									"type": "String",
-									"physicalType": "nvarchar"
-								},
-								"sink": {
-									"name": "EmployeeName",
-									"type": "String",
-									"physicalType": "nvarchar"
-								}
-							},
-							{
-								"source": {
-									"name": "Department",
-									"type": "String",
-									"physicalType": "nvarchar"
-								},
-								"sink": {
-									"name": "Department",
-									"type": "String",
-									"physicalType": "nvarchar"
-								}
-							},
-							{
-								"source": {
-									"name": "Salary",
-									"type": "Decimal",
-									"physicalType": "decimal",
-									"scale": 2,
-									"precision": 18
-								},
-								"sink": {
-									"name": "Salary",
-									"type": "Decimal",
-									"physicalType": "decimal",
-									"scale": 2,
-									"precision": 18
-								}
-							},
-							{
-								"source": {
-									"name": "LoadTimestamp",
-									"type": "DateTime",
-									"physicalType": "datetime2"
-								},
-								"sink": {
-									"name": "LoadTimestamp",
-									"type": "DateTime",
-									"physicalType": "datetime2"
-								}
-							},
-							{
-								"source": {
-									"name": "FileName",
-									"type": "String",
-									"physicalType": "nvarchar"
-								},
-								"sink": {
-									"name": "FileName",
-									"type": "String",
-									"physicalType": "nvarchar"
-								}
-							}
-						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
@@ -309,14 +157,10 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "DS_SQL_DynamicSource",
+						"referenceName": "DS_SQL_DynamicTarget",
 						"type": "DatasetReference",
 						"parameters": {
-							"p_SourceSchema": {
-								"value": "stg",
-								"type": "Expression"
-							},
-							"p_SourceTable": "@pipeline().parameters.p_StagingTable"
+							"p_TargetTable": "@pipeline().parameters.p_StagingTable"
 						}
 					}
 				],
