@@ -2,7 +2,7 @@
 	"name": "DS_SQL_DynamicSource",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "LS_AzureSQL_Source",
+			"referenceName": "LS_AzureSQL_MetaDB",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
@@ -17,7 +17,7 @@
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "dbo",
+			"schema": "stg",
 			"table": "@dataset().p_SourceTable"
 		}
 	}
