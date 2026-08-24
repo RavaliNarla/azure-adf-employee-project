@@ -17,10 +17,8 @@
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"table": {
-				"value": "@concat(\n    dataset().p_SourceSchema,\n    '.',\n    dataset().p_SourceTable\n)",
-				"type": "Expression"
-			}
+			"schema": "dbo",
+			"table": "@dataset().p_SourceTable"
 		}
 	}
 }
