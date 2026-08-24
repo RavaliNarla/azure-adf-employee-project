@@ -94,8 +94,14 @@
 										"value": "@item().LoadType",
 										"type": "Expression"
 									},
-									"p_TargetSchema": "@item().TargetSchema",
-									"p_TargetTable": "@item().TargetTable"
+									"p_TargetSchema": {
+										"value": "@item().TargetSchema",
+										"type": "Expression"
+									},
+									"p_TargetTable": {
+										"value": "@item().TargetTable",
+										"type": "Expression"
+									}
 								}
 							}
 						}
