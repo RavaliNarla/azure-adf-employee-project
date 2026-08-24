@@ -6,11 +6,9 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"p_TargetSchema": {
-				"type": "string"
-			},
 			"p_TargetTable": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "DimEmployee"
 			}
 		},
 		"annotations": [],
@@ -18,13 +16,10 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": {
-				"value": "@dataset().p_TargetSchema",
+				"value": "dw",
 				"type": "Expression"
 			},
-			"table": {
-				"value": "@dataset().p_TargetTable",
-				"type": "Expression"
-			}
+			"table": "@dataset().p_TargetTable"
 		}
 	}
 }
