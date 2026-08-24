@@ -251,8 +251,11 @@
 						"referenceName": "DS_SQL_DynamicDWTarget",
 						"type": "DatasetReference",
 						"parameters": {
-							"p_TargetTable": "@pipeline().parameters.p_TargetSchema",
-							"p_TargetSchema": "@pipeline().parameters.p_TargetTable"
+							"p_TargetTable": {
+								"value": "@pipeline().parameters.p_TargetTable",
+								"type": "Expression"
+							},
+							"p_TargetSchema": "@pipeline().parameters.p_TargetSchema"
 						}
 					}
 				]
