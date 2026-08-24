@@ -10,7 +10,8 @@
 				"type": "string"
 			},
 			"p_SourceTable": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "Employee"
 			}
 		},
 		"annotations": [],
