@@ -9,6 +9,10 @@
 			"p_TargetTable": {
 				"type": "string",
 				"defaultValue": "DimEmployee"
+			},
+			"p_TargetSchema": {
+				"type": "string",
+				"defaultValue": "dw"
 			}
 		},
 		"annotations": [],
