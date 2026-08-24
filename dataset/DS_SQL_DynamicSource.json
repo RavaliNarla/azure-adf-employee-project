@@ -7,7 +7,8 @@
 		},
 		"parameters": {
 			"p_SourceSchema": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "stg"
 			},
 			"p_SourceTable": {
 				"type": "string",
@@ -18,7 +19,7 @@
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "stg",
+			"schema": "@dataset().p_SourceSchema",
 			"table": "@dataset().p_SourceTable"
 		}
 	}
