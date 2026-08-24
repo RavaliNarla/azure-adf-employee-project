@@ -165,7 +165,7 @@
 								"type": "Expression"
 							},
 							"p_SourceTable": {
-								"value": "@last(split(pipeline().parameters.p_StagingTable,'.'))",
+								"value": "@pipeline().parameters.p_StagingTable",
 								"type": "Expression"
 							}
 						}
@@ -181,7 +181,7 @@
 								"type": "Expression"
 							},
 							"p_TargetTable": {
-								"value": "@pipeline().parameters.p_TargetSchema",
+								"value": "@pipeline().parameters.p_TargetTable",
 								"type": "Expression"
 							}
 						}
@@ -212,6 +212,12 @@
 				"type": "string"
 			},
 			"p_LoadType": {
+				"type": "string"
+			},
+			"p_TargetSchema": {
+				"type": "string"
+			},
+			"p_TargetTable": {
 				"type": "string"
 			}
 		},
