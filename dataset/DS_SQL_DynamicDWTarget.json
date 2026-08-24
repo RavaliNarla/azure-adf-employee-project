@@ -20,7 +20,7 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": {
-				"value": "dw",
+				"value": "@dataset().p_TargetSchema",
 				"type": "Expression"
 			},
 			"table": "@dataset().p_TargetTable"
