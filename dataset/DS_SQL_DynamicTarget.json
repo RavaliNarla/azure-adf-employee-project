@@ -6,8 +6,9 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"p_StagingTable": {
-				"type": "string"
+			"p_TargetTable": {
+				"type": "string",
+				"defaultValue": "Employee"
 			}
 		},
 		"annotations": [],
@@ -16,7 +17,7 @@
 		"typeProperties": {
 			"schema": "stg",
 			"table": {
-				"value": "@dataset().p_StagingTable",
+				"value": "@dataset().p_TargetTable",
 				"type": "Expression"
 			}
 		}
