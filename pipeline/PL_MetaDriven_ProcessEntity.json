@@ -161,13 +161,10 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"p_SourceSchema": {
-								"value": "stg",
+								"value": "dbo",
 								"type": "Expression"
 							},
-							"p_SourceTable": {
-								"value": "@pipeline().parameters.p_StagingTable",
-								"type": "Expression"
-							}
+							"p_SourceTable": "@pipeline().parameters.p_StagingTable"
 						}
 					}
 				],
