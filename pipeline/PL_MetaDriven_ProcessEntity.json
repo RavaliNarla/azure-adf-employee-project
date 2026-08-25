@@ -1,0 +1,338 @@
+{
+	"name": "PL_MetaDriven_ProcessEntity",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy_ADLS_to_SQL",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Script_PrepareLoad",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"additionalColumns": [
+							{
+								"name": "LoadTimestamp",
+								"value": {
+									"value": "@utcnow()",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "FileName",
+								"value": "$$FILEPATH"
+							}
+						],
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_ADLS_DynamicSource",
+						"type": "DatasetReference",
+						"parameters": {
+							"p_SourceContainer": "@pipeline().parameters.p_SourceContainer",
+							"p_SourcePathPattern": "@pipeline().parameters.p_SourcePathPattern",
+							"p_FileName": "@pipeline().parameters.p_FileName"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_SQL_DynamicTarget",
+						"type": "DatasetReference",
+						"parameters": {
+							"p_TargetTable": {
+								"value": "@pipeline().parameters.p_StagingTable",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Script_PrepareLoad",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_MetaDB",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"parameters": [
+								{
+									"name": "p_StagingTable",
+									"type": "String",
+									"value": {
+										"value": "@pipeline().parameters.p_StagingTable",
+										"type": "Expression"
+									},
+									"direction": "Input"
+								},
+								{
+									"name": "p_LoadType",
+									"type": "String",
+									"value": {
+										"value": "@pipeline().parameters.p_LoadType",
+										"type": "Expression"
+									},
+									"direction": "Input"
+								}
+							],
+							"type": "NonQuery",
+							"text": {
+								"value": "@if(equals(pipeline().parameters.p_LoadType,'Full'),concat('TRUNCATE TABLE ',pipeline().parameters.p_StagingTable,';'),'SELECT 1;')",
+								"type": "Expression"
+							}
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "Copy_Staging_to_DW",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Script_Deduplicate",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": {
+							"value": "@if(\n    equals(pipeline().parameters.p_LoadType,'Full'),\n    concat(\n        'TRUNCATE TABLE ',\n        pipeline().parameters.p_TargetSchema,\n        '.',\n        pipeline().parameters.p_TargetTable,\n        ';'\n    ),\n    'SELECT 1;'\n)",
+							"type": "Expression"
+						},
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_SQL_DynamicSource",
+						"type": "DatasetReference",
+						"parameters": {
+							"p_SourceSchema": "stg",
+							"p_SourceTable": "Employee"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_SQL_DynamicTarget",
+						"type": "DatasetReference",
+						"parameters": {
+							"p_TargetTable": "Employee"
+						}
+					}
+				]
+			},
+			{
+				"name": "Script_ValidateStaging",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Copy_ADLS_to_SQL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_MetaDB",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"parameters": [
+								{
+									"name": "EntityId",
+									"type": "Int32",
+									"value": "@pipeline().parameters.p_EntityId",
+									"direction": "Input"
+								},
+								{
+									"name": "BatchId",
+									"type": "String",
+									"value": "@pipeline().RunId",
+									"direction": "Input"
+								}
+							],
+							"type": "NonQuery",
+							"text": {
+								"value": "EXEC meta.usp_ValidateStagingData\n    @EntityId = @EntityId,\n    @BatchId = @BatchId;",
+								"type": "Expression"
+							}
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "Script_Deduplicate",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "If Condition",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_MetaDB",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "NonQuery"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "If Condition",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Script_ValidateStaging",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(pipeline().parameters.p_EntityName,'SalesOrder')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"p_EntityId": {
+				"type": "int"
+			},
+			"p_EntityName": {
+				"type": "string"
+			},
+			"p_SourceContainer": {
+				"type": "string"
+			},
+			"p_SourcePathPattern": {
+				"type": "string"
+			},
+			"p_SourceFileFormat": {
+				"type": "string"
+			},
+			"p_StagingTable": {
+				"type": "string"
+			},
+			"p_FileName": {
+				"type": "string"
+			},
+			"p_LoadType": {
+				"type": "string"
+			},
+			"p_TargetSchema": {
+				"type": "string"
+			},
+			"p_TargetTable": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}

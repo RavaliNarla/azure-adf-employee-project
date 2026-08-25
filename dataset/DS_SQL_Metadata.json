@@ -1,0 +1,41 @@
+{
+	"name": "DS_SQL_Metadata",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureSQL_Source",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "SourceSchema",
+				"type": "varchar"
+			},
+			{
+				"name": "SourceTable",
+				"type": "varchar"
+			},
+			{
+				"name": "TargetPath",
+				"type": "varchar"
+			},
+			{
+				"name": "LoadType",
+				"type": "varchar"
+			},
+			{
+				"name": "WatermarkColumn",
+				"type": "varchar"
+			},
+			{
+				"name": "IsActive",
+				"type": "bit"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ETL_Metadata"
+		}
+	}
+}

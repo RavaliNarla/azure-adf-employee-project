@@ -1,0 +1,26 @@
+{
+	"name": "DS_SQL_DynamicSource",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureSQL_MetaDB",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"p_SourceSchema": {
+				"type": "string",
+				"defaultValue": "stg"
+			},
+			"p_SourceTable": {
+				"type": "string",
+				"defaultValue": "Employee"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "@dataset().p_SourceSchema",
+			"table": "@dataset().p_SourceTable"
+		}
+	}
+}

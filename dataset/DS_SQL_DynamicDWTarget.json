@@ -1,0 +1,29 @@
+{
+	"name": "DS_SQL_DynamicDWTarget",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureSQL_MetaDB",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"p_TargetTable": {
+				"type": "string",
+				"defaultValue": "FactSales"
+			},
+			"p_TargetSchema": {
+				"type": "string",
+				"defaultValue": "dw"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().p_TargetSchema",
+				"type": "Expression"
+			},
+			"table": "@dataset().p_TargetTable"
+		}
+	}
+}

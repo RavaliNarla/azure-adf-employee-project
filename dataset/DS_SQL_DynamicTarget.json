@@ -1,0 +1,25 @@
+{
+	"name": "DS_SQL_DynamicTarget",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureSQL_MetaDB",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"p_TargetTable": {
+				"type": "string",
+				"defaultValue": "Employee"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "stg",
+			"table": {
+				"value": "@dataset().p_TargetTable",
+				"type": "Expression"
+			}
+		}
+	}
+}

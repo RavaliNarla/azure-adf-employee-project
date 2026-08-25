@@ -1,0 +1,29 @@
+{
+	"name": "DS_ADLS_DynamicTarget",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_Target",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"p_TargetPath": {
+				"type": "string"
+			},
+			"p_FileName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

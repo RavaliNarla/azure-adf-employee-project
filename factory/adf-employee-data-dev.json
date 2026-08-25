@@ -1,0 +1,15 @@
+{
+	"name": "adf-employee-data-dev",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "southindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "256a3493-fc91-4394-8008-e0726a4bb569",
+		"tenantId": "4cd7fc36-b4ef-4723-a374-ef6697059338"
+	}
+}

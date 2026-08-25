@@ -1,0 +1,120 @@
+{
+	"name": "pipeline2new",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "No",
+									"type": "Int32"
+								},
+								"sink": {
+									"path": "$['No']"
+								}
+							},
+							{
+								"source": {
+									"name": "Age",
+									"type": "Int32"
+								},
+								"sink": {
+									"path": "$['Age']"
+								}
+							},
+							{
+								"source": {
+									"name": "Gender",
+									"type": "Int32"
+								},
+								"sink": {
+									"path": "$['Gender']"
+								}
+							},
+							{
+								"source": {
+									"name": "Salary",
+									"type": "Decimal"
+								},
+								"sink": {
+									"path": "$['Salary']"
+								}
+							},
+							{
+								"source": {
+									"name": "Monthly Expenditure",
+									"type": "Decimal"
+								},
+								"sink": {
+									"path": "$['Monthly Expenditure']"
+								}
+							},
+							{
+								"source": {
+									"name": "Occupation",
+									"type": "String"
+								},
+								"sink": {
+									"path": "$['Occupation']"
+								}
+							},
+							{
+								"source": {
+									"name": "Healthy Lifestyle",
+									"type": "String"
+								},
+								"sink": {
+									"path": "$['Healthy Lifestyle']"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "AzureSqlTable1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Json1",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2026-08-19T09:21:48Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

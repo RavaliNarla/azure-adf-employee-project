@@ -1,0 +1,65 @@
+{
+	"name": "DS_ADLS_SalesOrder",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_DataLake",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "SalesOrder.csv",
+				"folderPath": "orders",
+				"fileSystem": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "OrderId",
+				"type": "String"
+			},
+			{
+				"name": "LineNumber",
+				"type": "String"
+			},
+			{
+				"name": "OrderDate",
+				"type": "String"
+			},
+			{
+				"name": "ProductId",
+				"type": "String"
+			},
+			{
+				"name": "CustomerId",
+				"type": "String"
+			},
+			{
+				"name": "StoreId",
+				"type": "String"
+			},
+			{
+				"name": "Quantity",
+				"type": "String"
+			},
+			{
+				"name": "UnitPrice",
+				"type": "String"
+			},
+			{
+				"name": "DiscountAmount",
+				"type": "String"
+			},
+			{
+				"name": "CostAmount",
+				"type": "String"
+			}
+		]
+	}
+}
