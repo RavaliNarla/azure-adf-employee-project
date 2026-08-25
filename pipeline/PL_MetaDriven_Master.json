@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT\n    EntityId,\n    EntityName,\n    SourceContainer,\n    SourcePathPattern,\n    SourceFileFormat,\n    FileName,\n    StagingTable,\n    TargetSchema,\n    TargetTable,\n    LoadType,\n    BusinessKeyColumns,\n    WatermarkColumn\nFROM meta.EntityConfig\nWHERE IsActive = 1\nORDER BY Priority;",
+						"sqlReaderQuery": "SELECT\n    EntityId,\n    EntityName,\n    EntityType,\n    SourceContainer,\n    SourcePathPattern,\n    SourceFileFormat,\n    FileName,\n    StagingTable,\n    TargetSchema,\n    TargetTable,\n    LoadType,\n    BusinessKeyColumns,\n    WatermarkColumn\nFROM meta.EntityConfig\nWHERE IsActive = 1\nORDER BY Priority;",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -45,7 +45,7 @@
 						"value": "@activity('Lookup_ActiveEntities').output.value",
 						"type": "Expression"
 					},
-					"isSequential": false,
+					"isSequential": true,
 					"activities": [
 						{
 							"name": "Execute_ProcessEntity",
@@ -68,6 +68,10 @@
 									},
 									"p_EntityName": {
 										"value": "@item().EntityName",
+										"type": "Expression"
+									},
+									"p_EntityType": {
+										"value": "@item().EntityType",
 										"type": "Expression"
 									},
 									"p_SourceContainer": {
