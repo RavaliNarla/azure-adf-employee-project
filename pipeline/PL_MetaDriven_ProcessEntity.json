@@ -175,7 +175,8 @@
 									"value": {
 										"value": "@pipeline().parameters.p_StagingTable",
 										"type": "Expression"
-									}
+									},
+									"direction": "Input"
 								},
 								{
 									"name": "p_LoadType",
@@ -183,7 +184,8 @@
 									"value": {
 										"value": "@pipeline().parameters.p_LoadType",
 										"type": "Expression"
-									}
+									},
+									"direction": "Input"
 								}
 							],
 							"type": "NonQuery",
