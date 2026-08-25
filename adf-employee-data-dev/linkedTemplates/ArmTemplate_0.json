@@ -882,6 +882,79 @@
 			"properties": {
 				"activities": [
 					{
+						"name": "Set_StartTime",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "v_StartTime",
+							"value": {
+								"value": "@utcnow()",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Script_PrepareLoad",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Set_StartTime",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "LS_AzureSQL_MetaDB",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"parameters": [
+										{
+											"name": "p_StagingTable",
+											"type": "String",
+											"value": {
+												"value": "@pipeline().parameters.p_StagingTable",
+												"type": "Expression"
+											},
+											"direction": "Input"
+										},
+										{
+											"name": "p_LoadType",
+											"type": "String",
+											"value": {
+												"value": "@pipeline().parameters.p_LoadType",
+												"type": "Expression"
+											},
+											"direction": "Input"
+										}
+									],
+									"type": "NonQuery",
+									"text": {
+										"value": "@if(equals(pipeline().parameters.p_LoadType,'Full'),concat('TRUNCATE TABLE stg.',pipeline().parameters.p_StagingTable,';'),'SELECT 1;')",
+										"type": "Expression"
+									}
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					},
+					{
 						"name": "Copy_ADLS_to_SQL",
 						"type": "Copy",
 						"dependsOn": [
@@ -966,119 +1039,6 @@
 						]
 					},
 					{
-						"name": "Script_PrepareLoad",
-						"type": "Script",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"linkedServiceName": {
-							"referenceName": "LS_AzureSQL_MetaDB",
-							"type": "LinkedServiceReference"
-						},
-						"typeProperties": {
-							"scripts": [
-								{
-									"parameters": [
-										{
-											"name": "p_StagingTable",
-											"type": "String",
-											"value": {
-												"value": "@pipeline().parameters.p_StagingTable",
-												"type": "Expression"
-											},
-											"direction": "Input"
-										},
-										{
-											"name": "p_LoadType",
-											"type": "String",
-											"value": {
-												"value": "@pipeline().parameters.p_LoadType",
-												"type": "Expression"
-											},
-											"direction": "Input"
-										}
-									],
-									"type": "NonQuery",
-									"text": {
-										"value": "@if(equals(pipeline().parameters.p_LoadType,'Full'),concat('TRUNCATE TABLE ',pipeline().parameters.p_StagingTable,';'),'SELECT 1;')",
-										"type": "Expression"
-									}
-								}
-							],
-							"scriptBlockExecutionTimeout": "02:00:00"
-						}
-					},
-					{
-						"name": "Copy_Staging_to_DW",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "Script_ValidateStaging",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"preCopyScript": {
-									"value": "@if(\n    equals(pipeline().parameters.p_LoadType,'Full'),\n    concat(\n        'TRUNCATE TABLE ',\n        pipeline().parameters.p_TargetSchema,\n        '.',\n        pipeline().parameters.p_TargetTable,\n        ';'\n    ),\n    'SELECT 1;'\n)",
-									"type": "Expression"
-								},
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "DS_SQL_DynamicSource",
-								"type": "DatasetReference",
-								"parameters": {
-									"p_SourceSchema": "stg",
-									"p_SourceTable": "Employee"
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "DS_SQL_DynamicTarget",
-								"type": "DatasetReference",
-								"parameters": {
-									"p_TargetTable": "Employee"
-								}
-							}
-						]
-					},
-					{
 						"name": "Script_ValidateStaging",
 						"type": "Script",
 						"dependsOn": [
@@ -1108,13 +1068,19 @@
 										{
 											"name": "EntityId",
 											"type": "Int32",
-											"value": "@pipeline().parameters.p_EntityId",
+											"value": {
+												"value": "@pipeline().parameters.p_EntityId",
+												"type": "Expression"
+											},
 											"direction": "Input"
 										},
 										{
 											"name": "BatchId",
 											"type": "String",
-											"value": "@pipeline().RunId",
+											"value": {
+												"value": "@pipeline().RunId",
+												"type": "Expression"
+											},
 											"direction": "Input"
 										}
 									],
@@ -1123,6 +1089,294 @@
 										"value": "EXEC meta.usp_ValidateStagingData\n    @EntityId = @EntityId,\n    @BatchId = @BatchId;",
 										"type": "Expression"
 									}
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					},
+					{
+						"name": "Script_Dedup",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Script_ValidateStaging",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "LS_AzureSQL_MetaDB",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"parameters": [
+										{
+											"name": "EntityId",
+											"type": "Int32",
+											"value": {
+												"value": "@pipeline().parameters.p_EntityId",
+												"type": "Expression"
+											},
+											"direction": "Input"
+										}
+									],
+									"type": "NonQuery",
+									"text": {
+										"value": "EXEC meta.usp_DeduplicateStaging @EntityId = @EntityId;",
+										"type": "Expression"
+									}
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					},
+					{
+						"name": "Script_LoadTarget",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Script_Dedup",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "LS_AzureSQL_MetaDB",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "NonQuery",
+									"text": {
+										"value": "@if(equals(pipeline().parameters.p_EntityType,'Dimension'), concat('EXEC dw.usp_LoadDim', pipeline().parameters.p_EntityName, ';'), concat('EXEC dw.usp_LoadFact', pipeline().parameters.p_EntityName, ';'))",
+										"type": "Expression"
+									}
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					},
+					{
+						"name": "Script_AuditSuccess",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Script_LoadTarget",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "LS_AzureSQL_MetaDB",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"parameters": [
+										{
+											"name": "BatchId",
+											"type": "String",
+											"value": {
+												"value": "@pipeline().RunId",
+												"type": "Expression"
+											},
+											"direction": "Input"
+										},
+										{
+											"name": "EntityId",
+											"type": "Int32",
+											"value": {
+												"value": "@pipeline().parameters.p_EntityId",
+												"type": "Expression"
+											},
+											"direction": "Input"
+										},
+										{
+											"name": "EntityName",
+											"type": "String",
+											"value": {
+												"value": "@pipeline().parameters.p_EntityName",
+												"type": "Expression"
+											},
+											"direction": "Input"
+										},
+										{
+											"name": "LoadType",
+											"type": "String",
+											"value": {
+												"value": "@pipeline().parameters.p_LoadType",
+												"type": "Expression"
+											},
+											"direction": "Input"
+										},
+										{
+											"name": "StartTime",
+											"type": "DateTime",
+											"value": {
+												"value": "@variables('v_StartTime')",
+												"type": "Expression"
+											},
+											"direction": "Input"
+										},
+										{
+											"name": "EndTime",
+											"type": "DateTime",
+											"value": {
+												"value": "@utcnow()",
+												"type": "Expression"
+											},
+											"direction": "Input"
+										},
+										{
+											"name": "Status",
+											"type": "String",
+											"value": "Success",
+											"direction": "Input"
+										},
+										{
+											"name": "ErrorMessage",
+											"type": "String",
+											"value": "",
+											"direction": "Input"
+										}
+									],
+									"type": "NonQuery",
+									"text": "EXEC meta.usp_InsertAuditLog @BatchId=@BatchId, @EntityId=@EntityId, @EntityName=@EntityName, @LoadType=@LoadType, @StartTime=@StartTime, @EndTime=@EndTime, @Status=@Status, @ErrorMessage=@ErrorMessage;"
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					},
+					{
+						"name": "Script_AuditFailure",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Script_LoadTarget",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "LS_AzureSQL_MetaDB",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"parameters": [
+										{
+											"name": "BatchId",
+											"type": "String",
+											"value": {
+												"value": "@pipeline().RunId",
+												"type": "Expression"
+											},
+											"direction": "Input"
+										},
+										{
+											"name": "EntityId",
+											"type": "Int32",
+											"value": {
+												"value": "@pipeline().parameters.p_EntityId",
+												"type": "Expression"
+											},
+											"direction": "Input"
+										},
+										{
+											"name": "EntityName",
+											"type": "String",
+											"value": {
+												"value": "@pipeline().parameters.p_EntityName",
+												"type": "Expression"
+											},
+											"direction": "Input"
+										},
+										{
+											"name": "LoadType",
+											"type": "String",
+											"value": {
+												"value": "@pipeline().parameters.p_LoadType",
+												"type": "Expression"
+											},
+											"direction": "Input"
+										},
+										{
+											"name": "StartTime",
+											"type": "DateTime",
+											"value": {
+												"value": "@variables('v_StartTime')",
+												"type": "Expression"
+											},
+											"direction": "Input"
+										},
+										{
+											"name": "EndTime",
+											"type": "DateTime",
+											"value": {
+												"value": "@utcnow()",
+												"type": "Expression"
+											},
+											"direction": "Input"
+										},
+										{
+											"name": "Status",
+											"type": "String",
+											"value": "Failed",
+											"direction": "Input"
+										},
+										{
+											"name": "ErrorMessage",
+											"type": "String",
+											"value": {
+												"value": "@string(activity('Script_LoadTarget').Error.Message)",
+												"type": "Expression"
+											},
+											"direction": "Input"
+										}
+									],
+									"type": "NonQuery",
+									"text": "EXEC meta.usp_InsertAuditLog @BatchId=@BatchId, @EntityId=@EntityId, @EntityName=@EntityName, @LoadType=@LoadType, @StartTime=@StartTime, @EndTime=@EndTime, @Status=@Status, @ErrorMessage=@ErrorMessage;"
 								}
 							],
 							"scriptBlockExecutionTimeout": "02:00:00"
@@ -1137,6 +1391,9 @@
 						"type": "int"
 					},
 					"p_EntityName": {
+						"type": "string"
+					},
+					"p_EntityType": {
 						"type": "string"
 					},
 					"p_SourceContainer": {
@@ -1164,13 +1421,17 @@
 						"type": "string"
 					}
 				},
+				"variables": {
+					"v_StartTime": {
+						"type": "String"
+					}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_ADLS_DynamicSource')]",
-				"[concat(variables('factoryId'), '/datasets/DS_SQL_DynamicTarget')]",
 				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_MetaDB')]",
-				"[concat(variables('factoryId'), '/datasets/DS_SQL_DynamicSource')]"
+				"[concat(variables('factoryId'), '/datasets/DS_ADLS_DynamicSource')]",
+				"[concat(variables('factoryId'), '/datasets/DS_SQL_DynamicTarget')]"
 			]
 		}
 	]
