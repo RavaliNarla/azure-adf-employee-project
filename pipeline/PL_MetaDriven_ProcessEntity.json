@@ -225,6 +225,20 @@
 				"typeProperties": {
 					"scripts": [
 						{
+							"parameters": [
+								{
+									"name": "EntityId",
+									"type": "Int32",
+									"value": "@pipeline().parameters.p_EntityId",
+									"direction": "Input"
+								},
+								{
+									"name": "BatchId",
+									"type": "String",
+									"value": "@pipeline().RunId",
+									"direction": "Input"
+								}
+							],
 							"type": "Query",
 							"text": {
 								"value": "EXEC meta.usp_ValidateStagingData\n    @EntityId = @EntityId,\n    @BatchId = @BatchId;",
