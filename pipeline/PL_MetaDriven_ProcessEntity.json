@@ -172,12 +172,18 @@
 								{
 									"name": "p_StagingTable",
 									"type": "String",
-									"value": "@pipeline().parameters.p_StagingTable"
+									"value": {
+										"value": "@pipeline().parameters.p_StagingTable",
+										"type": "Expression"
+									}
 								},
 								{
 									"name": "p_LoadType",
 									"type": "String",
-									"value": "@pipeline().parameters.p_LoadType"
+									"value": {
+										"value": "@pipeline().parameters.p_LoadType",
+										"type": "Expression"
+									}
 								}
 							],
 							"type": "NonQuery",
@@ -217,6 +223,10 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
+						"preCopyScript": {
+							"value": "@if(\n    equals(pipeline().parameters.p_LoadType,'Full'),\n    concat(\n        'TRUNCATE TABLE ',\n        pipeline().parameters.p_TargetSchema,\n        '.',\n        pipeline().parameters.p_TargetTable,\n        ';'\n    ),\n    'SELECT 1;'\n)",
+							"type": "Expression"
+						},
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false
 					},
