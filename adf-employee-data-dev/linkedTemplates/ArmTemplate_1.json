@@ -13,6 +13,298 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/PL_MetadataDriven_Load')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup_ETL_Metadata",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT\n    SourceSchema,\n    SourceTable,\n    TargetPath,\n    LoadType,\n    WatermarkColumn,\n    IsActive\nFROM dbo.ETL_Metadata\nWHERE IsActive = 1;",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "DS_SQL_Metadata",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach_Metadata",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup_ETL_Metadata",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup_ETL_Metadata').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Copy_SQL_To_ADLS",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "AzureSqlSource",
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".txt"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "DS_SQL_DynamicSource",
+											"type": "DatasetReference",
+											"parameters": {
+												"p_SourceSchema": "@item().SourceSchema",
+												"p_SourceTable": {
+													"value": "@item().SourceTable",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DS_ADLS_DynamicTarget",
+											"type": "DatasetReference",
+											"parameters": {
+												"p_TargetPath": "@item().TargetPath",
+												"p_FileName": {
+													"value": "@concat(item()['SourceTable'], '.csv')",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "No",
+											"type": "Int32",
+											"physicalType": "int"
+										},
+										"sink": {
+											"name": "No",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "Age",
+											"type": "Int32",
+											"physicalType": "int"
+										},
+										"sink": {
+											"name": "Age",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "Gender",
+											"type": "Int32",
+											"physicalType": "int"
+										},
+										"sink": {
+											"name": "Gender",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "Salary",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 2,
+											"precision": 12
+										},
+										"sink": {
+											"name": "Salary",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 2,
+											"precision": 12
+										}
+									},
+									{
+										"source": {
+											"name": "Monthly Expenditure",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 2,
+											"precision": 12
+										},
+										"sink": {
+											"name": "Monthly Expenditure",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 2,
+											"precision": 12
+										}
+									},
+									{
+										"source": {
+											"name": "Occupation",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "Occupation",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Healthy Lifestyle",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "Healthy Lifestyle",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "source1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlTable1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2026-08-19T09:21:47Z"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pipeline2new')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -140,113 +432,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/PL_MetaDriven_ProcessEntity')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy_ADLS_to_SQL",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"additionalColumns": [
-									{
-										"name": "LoadTimestamp",
-										"value": "@utcnow()"
-									},
-									{
-										"name": "FileName",
-										"value": "$$FILEPATH"
-									}
-								],
-								"storeSettings": {
-									"type": "AzureBlobFSReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "DS_ADLS_DynamicSource",
-								"type": "DatasetReference",
-								"parameters": {
-									"p_SourceContainer": "@pipeline().parameters.p_SourceContainer",
-									"p_SourcePathPattern": "@pipeline().parameters.p_SourcePathPattern",
-									"p_FileName": "@pipeline().parameters.p_FileName"
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "DS_SQL_DynamicTarget",
-								"type": "DatasetReference",
-								"parameters": {
-									"p_StagingTable": "@last(split(pipeline().parameters.p_StagingTable,'.'))"
-								}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"parameters": {
-					"p_EntityId": {
-						"type": "int"
-					},
-					"p_EntityName": {
-						"type": "string"
-					},
-					"p_SourceContainer": {
-						"type": "string"
-					},
-					"p_SourcePathPattern": {
-						"type": "string"
-					},
-					"p_SourceFileFormat": {
-						"type": "string"
-					},
-					"p_StagingTable": {
-						"type": "string"
-					},
-					"p_FileName": {
-						"type": "string"
-					}
-				},
-				"annotations": []
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/PL_MetaDriven_Master')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -313,13 +498,46 @@
 										},
 										"waitOnCompletion": true,
 										"parameters": {
-											"p_EntityId": "@item().EntityId",
-											"p_EntityName": "@item().EntityName",
-											"p_SourceContainer": "@item().SourceContainer",
-											"p_SourcePathPattern": "@item().SourcePathPattern",
-											"p_SourceFileFormat": "@item().SourceFileFormat",
-											"p_StagingTable": "@item().StagingTable",
-											"p_FileName": "@item().FileName"
+											"p_EntityId": {
+												"value": "@item().EntityId",
+												"type": "Expression"
+											},
+											"p_EntityName": {
+												"value": "@item().EntityName",
+												"type": "Expression"
+											},
+											"p_SourceContainer": {
+												"value": "@item().SourceContainer",
+												"type": "Expression"
+											},
+											"p_SourcePathPattern": {
+												"value": "@item().SourcePathPattern",
+												"type": "Expression"
+											},
+											"p_SourceFileFormat": {
+												"value": "@item().SourceFileFormat",
+												"type": "Expression"
+											},
+											"p_StagingTable": {
+												"value": "@item().StagingTable",
+												"type": "Expression"
+											},
+											"p_FileName": {
+												"value": "@item().FileName",
+												"type": "Expression"
+											},
+											"p_LoadType": {
+												"value": "@item().LoadType",
+												"type": "Expression"
+											},
+											"p_TargetSchema": {
+												"value": "@item().TargetSchema",
+												"type": "Expression"
+											},
+											"p_TargetTable": {
+												"value": "@item().TargetTable",
+												"type": "Expression"
+											}
 										}
 									}
 								}
@@ -332,9 +550,7 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/PL_MetaDriven_ProcessEntity')]"
-			]
+			"dependsOn": []
 		}
 	]
 }

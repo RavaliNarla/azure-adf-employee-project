@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
 		},
+		"LS_ADLS_DataLake_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_DataLake'"
+		},
 		"LS_ADLS_Target_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_Target'"
@@ -19,21 +23,21 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'LS_AzureSQL_Employee'"
 		},
-		"LS_AzureSQL_Source_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'LS_AzureSQL_Source'"
-		},
-		"LS_ADLS_DataLake_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_DataLake'"
-		},
 		"LS_AzureSQL_MetaDB_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'LS_AzureSQL_MetaDB'"
 		},
+		"LS_AzureSQL_Source_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_AzureSQL_Source'"
+		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://stdataengdev12345.dfs.core.windows.net/"
+		},
+		"LS_ADLS_DataLake_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://projectmetadriven.dfs.core.windows.net/"
 		},
 		"LS_ADLS_Target_properties_typeProperties_url": {
 			"type": "string",
@@ -51,22 +55,6 @@
 			"type": "string",
 			"defaultValue": "adminuser"
 		},
-		"LS_AzureSQL_Source_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "sql-employee-data-12345.database.windows.net"
-		},
-		"LS_AzureSQL_Source_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "metadb"
-		},
-		"LS_AzureSQL_Source_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "adminuser"
-		},
-		"LS_ADLS_DataLake_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://projectmetadriven.dfs.core.windows.net/"
-		},
 		"LS_AzureSQL_MetaDB_properties_typeProperties_server": {
 			"type": "string",
 			"defaultValue": "sql-employee-data-12345.database.windows.net"
@@ -76,6 +64,18 @@
 			"defaultValue": "metadb"
 		},
 		"LS_AzureSQL_MetaDB_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adminuser"
+		},
+		"LS_AzureSQL_Source_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "sql-employee-data-12345.database.windows.net"
+		},
+		"LS_AzureSQL_Source_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "metadb"
+		},
+		"LS_AzureSQL_Source_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "adminuser"
 		}
@@ -96,6 +96,23 @@
 					"accountKey": {
 						"type": "SecureString",
 						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_ADLS_DataLake')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('LS_ADLS_DataLake_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('LS_ADLS_DataLake_accountKey')]"
 					}
 				}
 			},
@@ -143,45 +160,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/LS_AzureSQL_Source')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"server": "[parameters('LS_AzureSQL_Source_properties_typeProperties_server')]",
-					"database": "[parameters('LS_AzureSQL_Source_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('LS_AzureSQL_Source_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('LS_AzureSQL_Source_password')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_ADLS_DataLake')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('LS_ADLS_DataLake_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('LS_ADLS_DataLake_accountKey')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/LS_AzureSQL_MetaDB')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -198,6 +176,28 @@
 					"password": {
 						"type": "SecureString",
 						"value": "[parameters('LS_AzureSQL_MetaDB_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_AzureSQL_Source')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('LS_AzureSQL_Source_properties_typeProperties_server')]",
+					"database": "[parameters('LS_AzureSQL_Source_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('LS_AzureSQL_Source_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('LS_AzureSQL_Source_password')]"
 					}
 				}
 			},
@@ -261,6 +261,55 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DS_ADLS_DynamicSource')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS_DataLake",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_SourceContainer": {
+						"type": "string"
+					},
+					"p_SourcePathPattern": {
+						"type": "string"
+					},
+					"p_FileName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().p_FileName",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().p_SourcePathPattern",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().p_SourceContainer",
+							"type": "Expression"
+						}
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_DataLake')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DS_ADLS_DynamicTarget')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -295,114 +344,12 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_SQL_DynamicSource')]",
+			"name": "[concat(parameters('factoryName'), '/DS_ADLS_Employee')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "LS_AzureSQL_Source",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"p_SourceSchema": {
-						"type": "string"
-					},
-					"p_SourceTable": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"table": {
-						"value": "@concat(\n    dataset().p_SourceSchema,\n    '.',\n    dataset().p_SourceTable\n)",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_Source')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_SQL_Metadata')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureSQL_Source",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "SourceSchema",
-						"type": "varchar"
-					},
-					{
-						"name": "SourceTable",
-						"type": "varchar"
-					},
-					{
-						"name": "TargetPath",
-						"type": "varchar"
-					},
-					{
-						"name": "LoadType",
-						"type": "varchar"
-					},
-					{
-						"name": "WatermarkColumn",
-						"type": "varchar"
-					},
-					{
-						"name": "IsActive",
-						"type": "bit"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "ETL_Metadata"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_Source')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Json1')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorage1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Json",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "employee.json",
-						"folderPath": "employee",
-						"fileSystem": "processed"
-					}
-				},
-				"schema": {}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/source1')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorage1",
+					"referenceName": "LS_ADLS_DataLake",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -410,9 +357,9 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "employee.csv",
+						"fileName": "Employee.csv",
 						"folderPath": "employee",
-						"fileSystem": "processed"
+						"fileSystem": "raw"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -421,37 +368,25 @@
 				},
 				"schema": [
 					{
-						"name": "No",
+						"name": "EmployeeId",
 						"type": "String"
 					},
 					{
-						"name": "Age",
+						"name": "EmployeeName",
 						"type": "String"
 					},
 					{
-						"name": "Gender",
+						"name": "Department",
 						"type": "String"
 					},
 					{
 						"name": "Salary",
 						"type": "String"
-					},
-					{
-						"name": "Monthly Expenditure",
-						"type": "String"
-					},
-					{
-						"name": "Occupation",
-						"type": "String"
-					},
-					{
-						"name": "Healthy Lifestyle",
-						"type": "String"
 					}
 				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_DataLake')]"
 			]
 		},
 		{
@@ -522,6 +457,110 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_DataLake')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SQL_DynamicDWTarget')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_MetaDB",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_TargetTable": {
+						"type": "string",
+						"defaultValue": "FactSales"
+					},
+					"p_TargetSchema": {
+						"type": "string",
+						"defaultValue": "dw"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().p_TargetSchema",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().p_TargetTable",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_MetaDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SQL_DynamicSource')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_MetaDB",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_SourceSchema": {
+						"type": "string",
+						"defaultValue": "stg"
+					},
+					"p_SourceTable": {
+						"type": "string",
+						"defaultValue": "Employee"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().p_SourceSchema",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().p_SourceTable",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_MetaDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SQL_DynamicTarget')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_MetaDB",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_TargetTable": {
+						"type": "string",
+						"defaultValue": "Employee"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "stg",
+					"table": {
+						"value": "@dataset().p_TargetTable",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_MetaDB')]"
 			]
 		},
 		{
@@ -628,6 +667,52 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DS_SQL_Metadata')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_Source",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "SourceSchema",
+						"type": "varchar"
+					},
+					{
+						"name": "SourceTable",
+						"type": "varchar"
+					},
+					{
+						"name": "TargetPath",
+						"type": "varchar"
+					},
+					{
+						"name": "LoadType",
+						"type": "varchar"
+					},
+					{
+						"name": "WatermarkColumn",
+						"type": "varchar"
+					},
+					{
+						"name": "IsActive",
+						"type": "bit"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "ETL_Metadata"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_Source')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DS_SQL_SalesOrder')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -708,12 +793,37 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_ADLS_Employee')]",
+			"name": "[concat(parameters('factoryName'), '/Json1')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "LS_ADLS_DataLake",
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "employee.json",
+						"folderPath": "employee",
+						"fileSystem": "processed"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/source1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -721,9 +831,9 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "Employee.csv",
+						"fileName": "employee.csv",
 						"folderPath": "employee",
-						"fileSystem": "raw"
+						"fileSystem": "processed"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -732,236 +842,56 @@
 				},
 				"schema": [
 					{
-						"name": "EmployeeId",
+						"name": "No",
 						"type": "String"
 					},
 					{
-						"name": "EmployeeName",
+						"name": "Age",
 						"type": "String"
 					},
 					{
-						"name": "Department",
+						"name": "Gender",
 						"type": "String"
 					},
 					{
 						"name": "Salary",
 						"type": "String"
+					},
+					{
+						"name": "Monthly Expenditure",
+						"type": "String"
+					},
+					{
+						"name": "Occupation",
+						"type": "String"
+					},
+					{
+						"name": "Healthy Lifestyle",
+						"type": "String"
 					}
 				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_DataLake')]"
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_ADLS_DynamicSource')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_ADLS_DataLake",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"p_SourceContainer": {
-						"type": "string"
-					},
-					"p_SourcePathPattern": {
-						"type": "string"
-					},
-					"p_FileName": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "@dataset().p_FileName",
-						"folderPath": "@dataset().p_SourcePathPattern",
-						"fileSystem": "@dataset().p_SourceContainer"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_DataLake')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_SQL_DynamicTarget')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureSQL_MetaDB",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"p_StagingTable": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "stg",
-					"table": "@dataset().p_StagingTable"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_MetaDB')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_MetadataDriven_Load')]",
+			"name": "[concat(parameters('factoryName'), '/PL_MetaDriven_ProcessEntity')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Lookup_ETL_Metadata",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "SELECT\n    SourceSchema,\n    SourceTable,\n    TargetPath,\n    LoadType,\n    WatermarkColumn,\n    IsActive\nFROM dbo.ETL_Metadata\nWHERE IsActive = 1;",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "DS_SQL_Metadata",
-								"type": "DatasetReference",
-								"parameters": {}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "ForEach_Metadata",
-						"type": "ForEach",
+						"name": "Copy_ADLS_to_SQL",
+						"type": "Copy",
 						"dependsOn": [
 							{
-								"activity": "Lookup_ETL_Metadata",
+								"activity": "Script_PrepareLoad",
 								"dependencyConditions": [
 									"Succeeded"
 								]
 							}
 						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Lookup_ETL_Metadata').output.value",
-								"type": "Expression"
-							},
-							"isSequential": true,
-							"activities": [
-								{
-									"name": "Copy_SQL_To_ADLS",
-									"type": "Copy",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "AzureSqlSource",
-											"queryTimeout": "02:00:00",
-											"partitionOption": "None"
-										},
-										"sink": {
-											"type": "DelimitedTextSink",
-											"storeSettings": {
-												"type": "AzureBlobFSWriteSettings"
-											},
-											"formatSettings": {
-												"type": "DelimitedTextWriteSettings",
-												"quoteAllText": true,
-												"fileExtension": ".txt"
-											}
-										},
-										"enableStaging": false,
-										"translator": {
-											"type": "TabularTranslator",
-											"typeConversion": true,
-											"typeConversionSettings": {
-												"allowDataTruncation": true,
-												"treatBooleanAsNumber": false
-											}
-										}
-									},
-									"inputs": [
-										{
-											"referenceName": "DS_SQL_DynamicSource",
-											"type": "DatasetReference",
-											"parameters": {
-												"p_SourceSchema": "@item().SourceSchema",
-												"p_SourceTable": {
-													"value": "@item().SourceTable",
-													"type": "Expression"
-												}
-											}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "DS_ADLS_DynamicTarget",
-											"type": "DatasetReference",
-											"parameters": {
-												"p_TargetPath": "@item().TargetPath",
-												"p_FileName": {
-													"value": "@concat(item()['SourceTable'], '.csv')",
-													"type": "Expression"
-												}
-											}
-										}
-									]
-								}
-							]
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_SQL_Metadata')]",
-				"[concat(variables('factoryId'), '/datasets/DS_SQL_DynamicSource')]",
-				"[concat(variables('factoryId'), '/datasets/DS_ADLS_DynamicTarget')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
 							"retry": 0,
@@ -973,6 +903,19 @@
 						"typeProperties": {
 							"source": {
 								"type": "DelimitedTextSource",
+								"additionalColumns": [
+									{
+										"name": "LoadTimestamp",
+										"value": {
+											"value": "@utcnow()",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "FileName",
+										"value": "$$FILEPATH"
+									}
+								],
 								"storeSettings": {
 									"type": "AzureBlobFSReadSettings",
 									"recursive": true,
@@ -985,105 +928,12 @@
 							"sink": {
 								"type": "AzureSqlSink",
 								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
 							},
 							"enableStaging": false,
 							"translator": {
 								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "No",
-											"type": "Int32",
-											"physicalType": "int"
-										},
-										"sink": {
-											"name": "No",
-											"type": "Int32",
-											"physicalType": "int"
-										}
-									},
-									{
-										"source": {
-											"name": "Age",
-											"type": "Int32",
-											"physicalType": "int"
-										},
-										"sink": {
-											"name": "Age",
-											"type": "Int32",
-											"physicalType": "int"
-										}
-									},
-									{
-										"source": {
-											"name": "Gender",
-											"type": "Int32",
-											"physicalType": "int"
-										},
-										"sink": {
-											"name": "Gender",
-											"type": "Int32",
-											"physicalType": "int"
-										}
-									},
-									{
-										"source": {
-											"name": "Salary",
-											"type": "Decimal",
-											"physicalType": "decimal",
-											"scale": 2,
-											"precision": 12
-										},
-										"sink": {
-											"name": "Salary",
-											"type": "Decimal",
-											"physicalType": "decimal",
-											"scale": 2,
-											"precision": 12
-										}
-									},
-									{
-										"source": {
-											"name": "Monthly Expenditure",
-											"type": "Decimal",
-											"physicalType": "decimal",
-											"scale": 2,
-											"precision": 12
-										},
-										"sink": {
-											"name": "Monthly Expenditure",
-											"type": "Decimal",
-											"physicalType": "decimal",
-											"scale": 2,
-											"precision": 12
-										}
-									},
-									{
-										"source": {
-											"name": "Occupation",
-											"type": "String",
-											"physicalType": "varchar"
-										},
-										"sink": {
-											"name": "Occupation",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Healthy Lifestyle",
-											"type": "String",
-											"physicalType": "varchar"
-										},
-										"sink": {
-											"name": "Healthy Lifestyle",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									}
-								],
 								"typeConversion": true,
 								"typeConversionSettings": {
 									"allowDataTruncation": true,
@@ -1093,29 +943,234 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "source1",
+								"referenceName": "DS_ADLS_DynamicSource",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"p_SourceContainer": "@pipeline().parameters.p_SourceContainer",
+									"p_SourcePathPattern": "@pipeline().parameters.p_SourcePathPattern",
+									"p_FileName": "@pipeline().parameters.p_FileName"
+								}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "AzureSqlTable1",
+								"referenceName": "DS_SQL_DynamicTarget",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"p_TargetTable": {
+										"value": "@pipeline().parameters.p_StagingTable",
+										"type": "Expression"
+									}
+								}
 							}
 						]
+					},
+					{
+						"name": "Script_PrepareLoad",
+						"type": "Script",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "LS_AzureSQL_MetaDB",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"parameters": [
+										{
+											"name": "p_StagingTable",
+											"type": "String",
+											"value": {
+												"value": "@pipeline().parameters.p_StagingTable",
+												"type": "Expression"
+											},
+											"direction": "Input"
+										},
+										{
+											"name": "p_LoadType",
+											"type": "String",
+											"value": {
+												"value": "@pipeline().parameters.p_LoadType",
+												"type": "Expression"
+											},
+											"direction": "Input"
+										}
+									],
+									"type": "NonQuery",
+									"text": {
+										"value": "@if(equals(pipeline().parameters.p_LoadType,'Full'),concat('TRUNCATE TABLE ',pipeline().parameters.p_StagingTable,';'),'SELECT 1;')",
+										"type": "Expression"
+									}
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					},
+					{
+						"name": "Copy_Staging_to_DW",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Script_ValidateStaging",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": {
+									"value": "@if(\n    equals(pipeline().parameters.p_LoadType,'Full'),\n    concat(\n        'TRUNCATE TABLE ',\n        pipeline().parameters.p_TargetSchema,\n        '.',\n        pipeline().parameters.p_TargetTable,\n        ';'\n    ),\n    'SELECT 1;'\n)",
+									"type": "Expression"
+								},
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_SQL_DynamicSource",
+								"type": "DatasetReference",
+								"parameters": {
+									"p_SourceSchema": "stg",
+									"p_SourceTable": "Employee"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_SQL_DynamicTarget",
+								"type": "DatasetReference",
+								"parameters": {
+									"p_TargetTable": "Employee"
+								}
+							}
+						]
+					},
+					{
+						"name": "Script_ValidateStaging",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Copy_ADLS_to_SQL",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "LS_AzureSQL_MetaDB",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"parameters": [
+										{
+											"name": "EntityId",
+											"type": "Int32",
+											"value": "@pipeline().parameters.p_EntityId",
+											"direction": "Input"
+										},
+										{
+											"name": "BatchId",
+											"type": "String",
+											"value": "@pipeline().RunId",
+											"direction": "Input"
+										}
+									],
+									"type": "NonQuery",
+									"text": {
+										"value": "EXEC meta.usp_ValidateStagingData\n    @EntityId = @EntityId,\n    @BatchId = @BatchId;",
+										"type": "Expression"
+									}
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
 					}
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
-				"annotations": [],
-				"lastPublishTime": "2026-08-19T09:21:47Z"
+				"parameters": {
+					"p_EntityId": {
+						"type": "int"
+					},
+					"p_EntityName": {
+						"type": "string"
+					},
+					"p_SourceContainer": {
+						"type": "string"
+					},
+					"p_SourcePathPattern": {
+						"type": "string"
+					},
+					"p_SourceFileFormat": {
+						"type": "string"
+					},
+					"p_StagingTable": {
+						"type": "string"
+					},
+					"p_FileName": {
+						"type": "string"
+					},
+					"p_LoadType": {
+						"type": "string"
+					},
+					"p_TargetSchema": {
+						"type": "string"
+					},
+					"p_TargetTable": {
+						"type": "string"
+					}
+				},
+				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/source1')]",
-				"[concat(variables('factoryId'), '/datasets/AzureSqlTable1')]"
+				"[concat(variables('factoryId'), '/datasets/DS_ADLS_DynamicSource')]",
+				"[concat(variables('factoryId'), '/datasets/DS_SQL_DynamicTarget')]",
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_MetaDB')]",
+				"[concat(variables('factoryId'), '/datasets/DS_SQL_DynamicSource')]"
 			]
 		}
 	]

@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
 		},
+		"LS_ADLS_DataLake_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_DataLake'"
+		},
 		"LS_ADLS_Target_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_Target'"
@@ -19,21 +23,21 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'LS_AzureSQL_Employee'"
 		},
-		"LS_AzureSQL_Source_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'LS_AzureSQL_Source'"
-		},
-		"LS_ADLS_DataLake_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_DataLake'"
-		},
 		"LS_AzureSQL_MetaDB_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'LS_AzureSQL_MetaDB'"
 		},
+		"LS_AzureSQL_Source_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_AzureSQL_Source'"
+		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://stdataengdev12345.dfs.core.windows.net/"
+		},
+		"LS_ADLS_DataLake_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://projectmetadriven.dfs.core.windows.net/"
 		},
 		"LS_ADLS_Target_properties_typeProperties_url": {
 			"type": "string",
@@ -51,22 +55,6 @@
 			"type": "string",
 			"defaultValue": "adminuser"
 		},
-		"LS_AzureSQL_Source_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "sql-employee-data-12345.database.windows.net"
-		},
-		"LS_AzureSQL_Source_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "metadb"
-		},
-		"LS_AzureSQL_Source_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "adminuser"
-		},
-		"LS_ADLS_DataLake_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://projectmetadriven.dfs.core.windows.net/"
-		},
 		"LS_AzureSQL_MetaDB_properties_typeProperties_server": {
 			"type": "string",
 			"defaultValue": "sql-employee-data-12345.database.windows.net"
@@ -76,6 +64,18 @@
 			"defaultValue": "metadb"
 		},
 		"LS_AzureSQL_MetaDB_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adminuser"
+		},
+		"LS_AzureSQL_Source_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "sql-employee-data-12345.database.windows.net"
+		},
+		"LS_AzureSQL_Source_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "metadb"
+		},
+		"LS_AzureSQL_Source_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "adminuser"
 		},
@@ -109,23 +109,26 @@
 					"AzureDataLakeStorage1_accountKey": {
 						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
 					},
+					"LS_ADLS_DataLake_accountKey": {
+						"value": "[parameters('LS_ADLS_DataLake_accountKey')]"
+					},
 					"LS_ADLS_Target_accountKey": {
 						"value": "[parameters('LS_ADLS_Target_accountKey')]"
 					},
 					"LS_AzureSQL_Employee_password": {
 						"value": "[parameters('LS_AzureSQL_Employee_password')]"
 					},
-					"LS_AzureSQL_Source_password": {
-						"value": "[parameters('LS_AzureSQL_Source_password')]"
-					},
-					"LS_ADLS_DataLake_accountKey": {
-						"value": "[parameters('LS_ADLS_DataLake_accountKey')]"
-					},
 					"LS_AzureSQL_MetaDB_password": {
 						"value": "[parameters('LS_AzureSQL_MetaDB_password')]"
 					},
+					"LS_AzureSQL_Source_password": {
+						"value": "[parameters('LS_AzureSQL_Source_password')]"
+					},
 					"AzureDataLakeStorage1_properties_typeProperties_url": {
 						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
+					},
+					"LS_ADLS_DataLake_properties_typeProperties_url": {
+						"value": "[parameters('LS_ADLS_DataLake_properties_typeProperties_url')]"
 					},
 					"LS_ADLS_Target_properties_typeProperties_url": {
 						"value": "[parameters('LS_ADLS_Target_properties_typeProperties_url')]"
@@ -139,18 +142,6 @@
 					"LS_AzureSQL_Employee_properties_typeProperties_userName": {
 						"value": "[parameters('LS_AzureSQL_Employee_properties_typeProperties_userName')]"
 					},
-					"LS_AzureSQL_Source_properties_typeProperties_server": {
-						"value": "[parameters('LS_AzureSQL_Source_properties_typeProperties_server')]"
-					},
-					"LS_AzureSQL_Source_properties_typeProperties_database": {
-						"value": "[parameters('LS_AzureSQL_Source_properties_typeProperties_database')]"
-					},
-					"LS_AzureSQL_Source_properties_typeProperties_userName": {
-						"value": "[parameters('LS_AzureSQL_Source_properties_typeProperties_userName')]"
-					},
-					"LS_ADLS_DataLake_properties_typeProperties_url": {
-						"value": "[parameters('LS_ADLS_DataLake_properties_typeProperties_url')]"
-					},
 					"LS_AzureSQL_MetaDB_properties_typeProperties_server": {
 						"value": "[parameters('LS_AzureSQL_MetaDB_properties_typeProperties_server')]"
 					},
@@ -159,6 +150,15 @@
 					},
 					"LS_AzureSQL_MetaDB_properties_typeProperties_userName": {
 						"value": "[parameters('LS_AzureSQL_MetaDB_properties_typeProperties_userName')]"
+					},
+					"LS_AzureSQL_Source_properties_typeProperties_server": {
+						"value": "[parameters('LS_AzureSQL_Source_properties_typeProperties_server')]"
+					},
+					"LS_AzureSQL_Source_properties_typeProperties_database": {
+						"value": "[parameters('LS_AzureSQL_Source_properties_typeProperties_database')]"
+					},
+					"LS_AzureSQL_Source_properties_typeProperties_userName": {
+						"value": "[parameters('LS_AzureSQL_Source_properties_typeProperties_userName')]"
 					}
 				}
 			},
