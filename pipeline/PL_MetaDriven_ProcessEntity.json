@@ -140,7 +140,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Copy_ADLS_to_SQL",
+						"activity": "Script_ValidateStaging",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -198,6 +198,42 @@
 						}
 					}
 				]
+			},
+			{
+				"name": "Script_ValidateStaging",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Copy_ADLS_to_SQL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_MetaDB",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": {
+								"value": "EXEC meta.usp_ValidateStagingData\n    @EntityId = @EntityId,\n    @BatchId = @BatchId;",
+								"type": "Expression"
+							}
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
 			}
 		],
 		"parameters": {
