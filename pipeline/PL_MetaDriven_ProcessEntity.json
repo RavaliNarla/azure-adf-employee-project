@@ -239,7 +239,7 @@
 									"direction": "Input"
 								}
 							],
-							"type": "Query",
+							"type": "NonQuery",
 							"text": {
 								"value": "EXEC meta.usp_ValidateStagingData\n    @EntityId = @EntityId,\n    @BatchId = @BatchId;",
 								"type": "Expression"
